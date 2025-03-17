@@ -124,3 +124,21 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
     # ADD YOUR TEST CASES HERE ...
+    def _create_accounts(self, count):
+        """Creates test accounts in the database"""
+        accounts = []
+        for _ in range(count):
+            account = Account(
+                name="John Doe",
+                address="123 Main Street",
+                phone_number="555-555-5555",
+                email="john@example.com"
+            )
+            account.create()
+            accounts.append(account)
+        return accounts
+
+
+    def test_get_account_not_found(self):
+        resp = self.client.get(f"{BASE_URL}/0")
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
